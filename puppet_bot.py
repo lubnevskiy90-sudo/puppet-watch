@@ -42,7 +42,7 @@ TG_TOKEN = os.environ.get("TG_TOKEN", "")
 TG_CHAT_ID = os.environ.get("TG_CHAT_ID", "")
 WATCH = [w.strip().lower() for w in os.environ.get("WATCH", "").split(",") if w.strip()]
 CHECK_SEATS = os.environ.get("CHECK_SEATS") == "1"
-HEARTBEAT_DAYS = 7  # раз в сколько дней слать «бот жив»
+HEARTBEAT_DAYS = 3  # раз в сколько дней слать «бот жив»
 
 # Строка вида «22 Октября, Четверг, 19:00»
 DATE_RE = re.compile(r"\d{1,2}\s+[А-Яа-яЁё]+,\s*[А-Яа-яЁё]+,\s*\d{1,2}:\d{2}")
