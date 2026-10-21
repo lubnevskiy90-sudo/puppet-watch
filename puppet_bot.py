@@ -25,6 +25,7 @@ import json
 import os
 import re
 import sys
+import time
 import html
 from pathlib import Path
 from urllib.parse import urljoin, urlparse, parse_qs
@@ -41,6 +42,7 @@ TG_TOKEN = os.environ.get("TG_TOKEN", "")
 TG_CHAT_ID = os.environ.get("TG_CHAT_ID", "")
 WATCH = [w.strip().lower() for w in os.environ.get("WATCH", "").split(",") if w.strip()]
 CHECK_SEATS = os.environ.get("CHECK_SEATS") == "1"
+HEARTBEAT_DAYS = 7  # раз в сколько дней слать «бот жив»
 
 # Строка вида «22 Октября, Четверг, 19:00»
 DATE_RE = re.compile(r"\d{1,2}\s+[А-Яа-яЁё]+,\s*[А-Яа-яЁё]+,\s*\d{1,2}:\d{2}")
@@ -158,6 +160,14 @@ def main() -> None:
             tg(fmt(s, "🎟 Новый сеанс в продаже"))
         for s in became_avail:
             tg(fmt(s, "✅ Появились билеты"))
+
+    now = time.time()
+    last = state.get("heartbeat")
+    if last is None:
+        state["heartbeat"] = now
+    elif now - last > HEARTBEAT_DAYS * 86400:
+        tg(f"💚 Бот работает. Отслеживаю сеансов: {len(found)}.")
+        state["heartbeat"] = now
 
     for i, s in found.items():
         state["seen"][i] = {"title": s["title"], "when": s["when"]}
