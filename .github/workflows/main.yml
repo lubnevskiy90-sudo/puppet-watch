@@ -24,6 +24,12 @@ jobs:
 
       - run: pip install requests beautifulsoup4
 
+      - name: Check connectivity
+        continue-on-error: true
+        run: |
+          curl -4 -sv -m 15 https://puppet-minsk.by/afisha -o /dev/null
+          curl -6 -sv -m 15 https://puppet-minsk.by/afisha -o /dev/null
+
       - name: Run bot
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
